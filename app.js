@@ -1,4 +1,5 @@
 //jshint esversion:6
+require("dotenv").config();
 const express = require("express");
 
 const bodyParser = require("body-parser");
@@ -15,16 +16,19 @@ mongoose.connect("mongodb://localhost:27017/userDB", {
 	useNewUrlParser: true
 });
 
+//process.env.VARIABLE_NAME to get SECRET KEY
 
 const userSchema = new mongoose.Schema({  //it is an object created from mongoose class
 	email: String,
 	password: String
 
 });
-const secret = "YES"; //the seed for encryptions?
+
+//SECRET KEY WILL BE PLACED IN .ENV file
+//const secret = "YES"; //the seed for encryptions ?
 
 
-userSchema.plugin(encrypt, {secret:secret, encryptedFields:["password"]}); //will encrypt only one field using the secret code and the ENC fields.
+userSchema.plugin(encrypt, {secret:process.env.SECRET, encryptedFields:["password"]}); //will encrypt only one field using the secret code and the ENC fields.
 
 const User = new mongoose.model("User", userSchema);
 
